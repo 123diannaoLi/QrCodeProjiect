@@ -13,7 +13,7 @@ import tensorflow as tf
 from distutils.version import LooseVersion
 assert LooseVersion(tf.__version__) >= LooseVersion('1.6'), 'Please use TensorFlow version 1.6 or newer'
 print('TensorFlow Version: {}'.format(tf.__version__))
-
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 import const
 from util import *
 from input_pipeline import *
@@ -24,13 +24,13 @@ flags.DEFINE_string('dataset_root_dir', '',
                     'Root directory to put all the training data.')
 flags.DEFINE_string('csv_path', '', 
                     'CSV file path.')
-flags.DEFINE_string('checkpoint_dir', './checkpoint', 
+flags.DEFINE_string('checkpoint_dir', './checkpointxiantiao', 
                     'Checkpoint directory.')
 flags.DEFINE_string('debug_image_dir', './debug_output_image', 
                     'Debug output image directory.')
 flags.DEFINE_string('log_dir', './log', 
                     'Log directory for tensorflow.')
-flags.DEFINE_integer('batch_size', 4, 
+flags.DEFINE_integer('batch_size', 4,
                      'Batch size, default 4.')
 flags.DEFINE_integer('iterations', 90000000, 
                      'Number of iterations, default 90000000.')
@@ -74,8 +74,8 @@ print('###########################################')
 
 if __name__ == "__main__":
     #命令行传入的路径参数，不带最后的'/'，这里要把'/'补全，然后传入给fix_size_image_pipeline
-    dataset_root_dir_string = os.path.join(FLAGS.dataset_root_dir, '') 
-
+    dataset_root_dir_string = os.path.join(FLAGS.dataset_root_dir, '')
+    print('dataset_root_dir_string is: {}'.format(dataset_root_dir_string))
     '''
     严格来说，在机器学习任务，应该区分训练集和验证集。
     但是在这份代码中，因为训练样本都是合成出来的，所以就没有区分验证集了，
@@ -92,6 +92,7 @@ if __name__ == "__main__":
     这种关键部位的 "缺失"，在后续的找点算法里就有点无能为力。 
     '''
     input_queue_for_train = tf.train.string_input_producer([FLAGS.csv_path])
+    print(input_queue_for_train)
     image_tensor, annotation_tensor, \
         image_path_tensor = fix_size_image_pipeline(dataset_root_dir_string, 
                                             input_queue_for_train, 
@@ -165,6 +166,7 @@ if __name__ == "__main__":
 
     print('\n\n')
     print('############################################################')
+    coord = tf.train.Coordinator()
     with tf.Session() as sess:
         sess.run(global_init)
 
@@ -196,7 +198,7 @@ if __name__ == "__main__":
             print('++ use batch norm')
         
 
-        coord = tf.train.Coordinator()
+        #coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord) 
 
         for step in range(FLAGS.iterations):

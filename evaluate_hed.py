@@ -16,9 +16,9 @@ from util import *
 from hed_net import *
 
 from tensorflow import flags
-flags.DEFINE_string('image', './test_image/test15.jpg', 
+flags.DEFINE_string('image', '2869a65c463a11e9b72b06c7aa0003e2_color.jpg', 
                     'Image path to run hed, must be jpg image.')
-flags.DEFINE_string('checkpoint_dir', './checkpoint', 
+flags.DEFINE_string('checkpoint_dir', './checkpoint 12yue14ri14dian45ios替换后', 
                     'Checkpoint directory.')
 flags.DEFINE_string('output_dir', './test_image', 
                     'Output directory.')
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     image_float = tf.expand_dims(image_float, axis=0)
 
     dsn_fuse, dsn1, dsn2, dsn3, dsn4, dsn5 = mobilenet_v2_style_hed(image_float, batch_size, is_training_placeholder)
-
+    print(dsn_fuse, dsn1, dsn2, dsn3, dsn4, dsn5)
     global_init = tf.global_variables_initializer()
 
     # Saver

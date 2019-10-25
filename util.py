@@ -64,7 +64,14 @@ def plot_and_save_image(input_image_path, input_annotation,
     fig.tight_layout()
 
     ax1.set_title('input image')
+    #input_image_path =input_image_path+''
+    #input_image_path=input_image_path[1:]
+    #print("input_image_path"+input_image_path)
+    #input_image_path =str(input_image_path)
+    input_image_path = str(input_image_path, encoding="utf8")
+    #input_image_path='dataset/generate_sample_by_ios_image_size_256_256_thickness_0.2/0eljIBC7ye_large_size_9_78_1_color.jpg'
     input_image = cv2.imread(input_image_path)
+
     b, g, r  = cv2.split(input_image)
     input_image = cv2.merge((r, g, b))
     input_image = cv2.resize(input_image, (const.image_width, const.image_height), interpolation = cv2.INTER_CUBIC)

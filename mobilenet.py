@@ -42,7 +42,7 @@ def mobilenet_v1(inputs, alpha, is_training):
     https://github.com/keras-team/keras/blob/master/keras/applications/mobilenet.py
     https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/python/keras/_impl/keras/applications/mobilenet.py
     '''
-    assert const.use_batch_norm == True
+    assert const.use_batch_norm == False
 
     if alpha not in [0.25, 0.50, 0.75, 1.0]:
         raise ValueError('alpha can be one of'
@@ -213,7 +213,7 @@ def mobilenet_v1(inputs, alpha, is_training):
 
 
 def mobilenet_v2_func_blocks(is_training):
-    assert const.use_batch_norm == True
+    assert const.use_batch_norm == False
 
     filter_initializer = tf.contrib.layers.xavier_initializer()
     activation_func = tf.nn.relu6
@@ -365,7 +365,7 @@ def mobilenet_v2_func_blocks(is_training):
 
 
 def mobilenet_v2(inputs, is_training):
-    assert const.use_batch_norm == True
+    assert const.use_batch_norm == False
 
     func_blocks = mobilenet_v2_func_blocks(is_training)
     _conv2d = func_blocks['conv2d'] 

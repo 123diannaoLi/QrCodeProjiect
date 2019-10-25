@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     csv_file_path = os.path.join(FLAGS.dataset_root_dir, '{}.csv'.format(FLAGS.dataset_folder_name))
 
-    f = open(csv_file_path, 'wb')
+    f = open(csv_file_path, 'w')
     csv_writer = csv.writer(f)
 
     # !! TensorFlow 读取 csv 的时候，不需要也不会处理这一行 title 信息，只会直接读取数据
@@ -89,23 +89,27 @@ if __name__ == "__main__":
         annotation_image_path = os.path.join(image_dataset_dir, annotation_image_name)
         annotation_gray_image_path = os.path.join(image_dataset_dir, annotation_gray_image_name)
         annotation_thresh_gray_image_path = os.path.join(image_dataset_dir, annotation_thresh_gray_image_name)
-
-        image = cv2.imread(annotation_image_path, cv2.IMREAD_UNCHANGED)
-        if image is None:
+        print("color_image_path:"+color_image_path)
+        print("annotation_image_path："+annotation_image_path)
+        print("annotation_gray_image_path"+annotation_gray_image_path)
+        print("annotation_thresh_gray_image_path"+annotation_thresh_gray_image_path)
+        grayImage = cv2.imread(annotation_image_path, 0)
+        if grayImage is None:
             print('annotation image is None, path is: {}'.format(annotation_image_path))
             continue
 
-        grayImage = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
+
         cv2.imwrite(annotation_gray_image_path, grayImage)
 
         #二值化，这张图才是训练样本中的 Y 
         ret, threshGrayImage = cv2.threshold(grayImage, 20, 255, cv2.THRESH_BINARY)
+        #print("ret:"+ret+"threshGrayImage"+)
         cv2.imwrite(annotation_thresh_gray_image_path, threshGrayImage)
-
+        print("flagsdatasetfoldername:"+FLAGS.dataset_folder_name + '/' +"flagcolorimagename:"+ color_image_name+"flagesdatasetfoldername:"+FLAGS.dataset_folder_name + '/'+"annotation:" + annotation_thresh_gray_image_name)
         # csv 里面保存的不是绝对路径，在 input_pipeline.py 里面还是需要根据FLAGS.dataset_root_dir进行拼装
-        csv_writer.writerow([FLAGS.dataset_folder_name + '/' + color_image_name, 
-                             FLAGS.dataset_folder_name + '/' + annotation_thresh_gray_image_name])
-
+        csv_writer.writerow([FLAGS.dataset_folder_name + '/' + color_image_name,
+                              FLAGS.dataset_folder_name + '/' + annotation_thresh_gray_image_name])
+        #csv_writer.writerow(['a', '1', '1', '2', '2'])
 
     f.close()
     print('finished')

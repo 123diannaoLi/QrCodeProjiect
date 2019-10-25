@@ -42,7 +42,7 @@ def class_balanced_sigmoid_cross_entropy(logits, label):
 
 
 def mobilenet_v2_style_hed(inputs, batch_size, is_training):
-    assert const.use_batch_norm == True
+    assert const.use_batch_norm == False
     assert const.use_kernel_regularizer == False
 
     if const.use_kernel_regularizer:
@@ -195,7 +195,7 @@ def mobilenet_v2_style_hed(inputs, batch_size, is_training):
 
 
 def mobilenet_v1_style_hed(inputs, batch_size, is_training):
-    assert const.use_batch_norm == True
+    assert const.use_batch_norm == False
     assert const.use_kernel_regularizer == False
 
     alpha = 1.0
@@ -337,9 +337,9 @@ def mobilenet_v1_style_hed(inputs, batch_size, is_training):
             end_points['block1'] = net
 
             dsn2 = net
-            net = _depthwise_conv2d(net, 32, [3, 3], stride=2, scope='block2')
+            net = _depthwise_conv2d(net, 128, [3, 3], stride=2, scope='block2')
             end_points['block2'] = net
-            net = _depthwise_conv2d(net, 32, [3, 3], stride=1, scope='block3')
+            net = _depthwise_conv2d(net, 128, [3, 3], stride=1, scope='block3')
             end_points['block3'] = net
 
             dsn3 = net
